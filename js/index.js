@@ -1,4 +1,18 @@
 $(document).ready(function() {
+    // désactiver boutons inscription et connexion
+    // $("#inscrip").prop("disabled", true);
+    $("#connex").prop("disabled", true);
+
+    // activer bouton inscription
+    function btnInscrip() {
+        $("#inscrip").prop("disabled", false);
+    };
+
+    // activer bouton connexion
+    function btnConnex() {
+        $("#connex").prop("disabled", false);
+    };
+
     // contrôle password
     $('#pass, #passOk').on('keyup', function(e) {
         // comparaison confirmation
@@ -74,6 +88,40 @@ $(document).ready(function() {
         $("#ville").autocomplete("option", "delay", 100);
     });
 
+    // stockage localStorage inscription
+    $("#login").focusout(function() {
+        var login = $('#login').val();
+        localStorage.setItem("login", login);
+    });
+    $("#pass").focusout(function() {
+        var pass = $('#pass').val();
+        localStorage.setItem("pass", pass);
+    });
+
+    // lecture localStorage connexion
+    $("#login2").focusout(function() {
+        var login2 = $('#login2').val();
+        localStorage.getItem("login", login);
+        if (login2 == localStorage.getItem("login", login)) {
+            console.log("login ok");
+        } else {
+            console.log("login erroné");
+        }
+    });
+    $("#pass2").focusout(function() {
+        var pass2 = $('#pass2').val();
+        localStorage.getItem("pass", pass);
+        if (pass2 == localStorage.getItem("pass", pass)) {
+            console.log("pass ok");
+        } else {
+            console.log("pass erroné");
+        }
+    });
+
+    // if (loginOk == 1 && passOk == 1) {
+    //     console.log(loginOk + passOk);
+    //     // btnConnex();
+    // }
 
     // formulaire inscription
     $('button').click(function() {
@@ -104,19 +152,5 @@ $(document).ready(function() {
         console.log(customer);
         return false;
     });
-
-
-
-
-
-
-
-
-
-
-    function btn() {
-        submit("button").prop(disable, true);
-    };
-
 
 });
