@@ -1,32 +1,95 @@
 $(document).ready(function() {
+    // contrôle password
+    $('#pass, #passOk').on('keyup', function(e) {
+        // comparaison confirmation
+        if ($('#pass').val() != '' && $('#passOk').val() != '' && $('#pass').val() != $('#passOk').val()) {
+            $('#passStrenght').removeClass().addClass('alert alert-error').html('Erreur de confirmation');
+            return false;
+        }
+        // majuscule, minuscule, chiffre
+        var strongRegex = new RegExp("^(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$", "g");
+        // autres majuscule, minuscule, chiffre
+        var mediumRegex = new RegExp("^(?=.{7,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g");
+        // mini 8 caractères
+        var okRegex = new RegExp("(?=.{8,}).*", "g");
+        if (okRegex.test($(this).val()) === false) {
+            $('#passStrenght').html('Veuillez indiquer 8 caractères minimum.');
+        } else if (strongRegex.test($(this).val())) {
+            $('#passStrenght').html('Votre mot de passe est validé!');
+        } else if (mediumRegex.test($(this).val())) {
+            $('#passStrenght').html('Utiliser des chiffres, des lettres majuscules et des caractères spéciaux.');
+        } else {
+            $('#passStrenght').html('Utiliser des chiffres et lettres majuscules.');
+        }
+        return true;
+    });
 
-    // $.ajax({
-    //     url: "/json",
-    //     type: "GET",
-    //     dataType: "json",
-    //     success: crm,
-    //     error: function() {
-    //         // alert("404 Not Found - Oops something went wrong !");
-    //     }
-    // });
+    // afficher password
+    $('.showpass').on('mousedown', function() {
+        $(this).prev('input').prop('type', 'text');
+    });
+    $('.showpass').on('mouseup', function() {
+        $(this).prev('input').prop('type', 'password');
+    });
 
-    // function crm(data) {
-    //     for (var i = 0; i < data.customers.length; i++) {
-    //         var id = data.customers[i].id;
-    //         var fname = data.customers[i].first_name;
-    //         var lname = data.customers[i].last_name;
-    //         var company = data.customers[i].company;
-    //         var role = data.customers[i].role;
-    //         var phone = data.customers[i].phone;
-    //         var email = data.customers[i].email;
-    //         var desc = data.customers[i].description;
+    // contrôle mail
+    $('#mail').focusout(function() {
+        var email = $("#mail").val();
+        if (email.match(/[a-z0-9_\-\.]+@[a-z0-9_\-\.]+\.[a-z]+/i)) {
+            $('#mailOk').html('Votre mail est validé!');
+        } else {
+            $('#mailOk').html('Veuillez renseigner un mail valide.');
+        }
+    });
 
-    //         $("#crm").append('<div><br>' + id + '<br>' + fname + '<br>' + lname + '<br>' + company + '<br>' + role + '<br>' + phone + '<br>' + email + '<br>' + desc + '<br></div>');
-    //     };
-    // };
+    // contrôle url
+    $('#url').focusout(function() {
+        var urlRegex = new RegExp(/^(HTTP|HTTP|http(s)?:\/\/|(www\.))?[A-Za-z0-9]+([\-\.]{1}[A-Za-z0-9]+)*\.[A-Za-z]{2,40}(:[0-9]{1,40})?(\/.*)?$/);
+        var urlOk = $("#url").val();
+        if (urlRegex.test(urlOk) === true) {
+            $('#urlOk').html('Votre url est validée!');
+        } else {
+            $('#urlOk').html('Veuillez renseigner une url valide.');
+        }
+    });
 
 
+
+    $("#ville").autocomplete({
+        source: function(request, response) {
+            $.getJSON(
+                "http://gd.geobytes.com/AutoCompleteCity?callback=?&q=" + request.term,
+                function(data) {
+                    console.log(data);
+                    response(data);
+                }
+            );
+        },
+        minLength: 3,
+        select: function(event, ui) {
+            var selectedObj = ui.item;
+            $("#ville").val(selectedObj.value);
+            getcitydetails(selectedObj.value);
+            return false;
+        },
+        open: function() {
+            $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+        },
+        close: function() {
+            $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+        }
+    });
+    $("#ville").autocomplete("option", "delay", 100);
+
+
+
+    // formulaire inscription
     $('button').click(function() {
+        // var input = $('input').val();
+        // var textarea = $('textarea').val();
+        // if (input == "" || textarea == "") {
+        //     alert("Veuillez renseigner tous les champs");
+        // };
         var customer, last_name, first_name, login, pass, born, ville, mail, phone, url, hobbies, color, homme, femme;
         customer = {
             last_name: $('#last_name').val(),
@@ -39,7 +102,7 @@ $(document).ready(function() {
             phone: $('#phone').val(),
             url: $('#url').val(),
             hobbies: $('#hobbies').val(),
-            color: $('#color').val(),
+            color: $('#color').val()
         };
         if ($("#femme").is(':checked')) {
             console.log("femme")
@@ -48,29 +111,20 @@ $(document).ready(function() {
         }
         console.log(customer);
         return false;
-
-        // $(".result").append($('<div>' + customers + '</div>'));
-
-        // $.ajax({
-        //     url: customer,
-        //     type: "GET",
-        //     dataType: "html",
-        //     success: read,
-        //     error: function() {
-        //         alert("404 Not Found - Oops something went wrong !");
-        //     }
-        // });
-
-        // function read(form) {
-        //     console.log("ok");
-        //     return false;
-        //     // $('#post').html(customers);
-        //     // $("#crm").append('<div>' + data + '</div>');
-        // }
-
-
-
     });
+
+
+
+
+
+
+
+
+
+
+    function btn() {
+        submit("button").prop(disable, true);
+    };
 
 
 });

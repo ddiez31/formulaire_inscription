@@ -1,0 +1,30 @@
+input:valid,
+textarea:valid {
+    box-shadow: 0 0 5px 1px green;
+}
+
+input:invalid,
+textarea:invalid {
+    box-shadow: 0 0 5px 1px red;
+}
+
+div {
+    padding-top: 10px;
+}
+
+input #color:valid {
+    box-shadow: 0 0 5px 1px green;
+}
+
+input #color:invalid {
+    box-shadow: 0 0 5px 1px red;
+}
+
+.showpass {
+    font-size: 9px;
+    text-transform: uppercase;
+    position: absolute;
+    cursor: pointer;
+    margin-left: -30px;
+    margin-top: 10px;
+}
