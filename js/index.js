@@ -1,17 +1,8 @@
 $(document).ready(function() {
-    // désactiver boutons inscription et connexion
-    // $("#inscrip").prop("disabled", true);
-    $("#connex").prop("disabled", true);
-
-    // activer bouton inscription
-    function btnInscrip() {
-        $("#inscrip").prop("disabled", false);
-    };
-
-    // activer bouton connexion
-    function btnConnex() {
-        $("#connex").prop("disabled", false);
-    };
+    var customer, last_name, first_name;
+    var login, pass, login2, pass2, login3, pass3;
+    var born, ville, mail, phone, url, hobbies, color;
+    var homme, femme;
 
     // contrôle password
     $('#pass, #passOk').on('keyup', function(e) {
@@ -48,13 +39,25 @@ $(document).ready(function() {
 
     // contrôle mail
     $('#mail').focusout(function() {
-        var email = $("#mail").val();
+        email = $("#mail").val();
         if (email.match(/[a-z0-9_\-\.]+@[a-z0-9_\-\.]+\.[a-z]+/i)) {
             $('#mailOk').html('Votre mail est validé!');
         } else {
             $('#mailOk').html('Veuillez renseigner un mail valide.');
         }
     });
+
+    // contrôle téléphone
+    $('#phone').focusout(function() {
+        var phoneRegex = new RegExp(/^(01|02|03|04|05|06|07|09)[0-9]{8}/gi);
+        var phoneOk = $("#phone").val();
+        if (phoneRegex.test(phoneOk) === true) {
+            $('#phoneOk').html('Votre n° de tél est validé!');
+        } else {
+            $('#phoneOk').html('Veuillez renseigner un n° de tél valide.');
+        }
+    });
+
 
     // contrôle url
     $('#url').focusout(function() {
@@ -90,47 +93,41 @@ $(document).ready(function() {
 
     // stockage localStorage inscription
     $("#login").focusout(function() {
-        var login = $('#login').val();
+        login = $('#login').val();
         localStorage.setItem("login", login);
     });
     $("#pass").focusout(function() {
-        var pass = $('#pass').val();
+        pass = $('#pass').val();
         localStorage.setItem("pass", pass);
     });
 
     // lecture localStorage connexion
     $("#login2").focusout(function() {
-        var login2 = $('#login2').val();
-        localStorage.getItem("login", login);
-        if (login2 == localStorage.getItem("login", login)) {
+        login2 = $('#login2').val();
+        login3 = localStorage.getItem("login", login);
+        if (login2 == login3) {
             console.log("login ok");
         } else {
             console.log("login erroné");
         }
     });
     $("#pass2").focusout(function() {
-        var pass2 = $('#pass2').val();
-        localStorage.getItem("pass", pass);
-        if (pass2 == localStorage.getItem("pass", pass)) {
+        pass2 = $('#pass2').val();
+        pass3 = localStorage.getItem("pass", pass);
+        if (pass2 == pass3) {
             console.log("pass ok");
         } else {
             console.log("pass erroné");
         }
     });
 
-    // if (loginOk == 1 && passOk == 1) {
-    //     console.log(loginOk + passOk);
-    //     // btnConnex();
-    // }
-
     // formulaire inscription
-    $('button').click(function() {
+    $('#inscrip').click(function() {
         // var input = $('input').val();
         // var textarea = $('textarea').val();
         // if (input == "" || textarea == "") {
         //     alert("Veuillez renseigner tous les champs");
         // };
-        var customer, last_name, first_name, login, pass, born, ville, mail, phone, url, hobbies, color, homme, femme;
         customer = {
             last_name: $('#last_name').val(),
             first_name: $('#first_name').val(),
@@ -152,5 +149,20 @@ $(document).ready(function() {
         console.log(customer);
         return false;
     });
+
+    $('#connex').click(function() {
+        var login2 = $('#login2').val();
+        var pass2 = $('#pass2').val();
+        if (login2 == "" || pass2 == "") {
+            alert("Veuillez renseigner tous les champs");
+        } else {
+            alert("Bienvenue");
+        }
+    });
+
+
+
+
+
 
 });
