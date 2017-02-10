@@ -1,8 +1,10 @@
 $(document).ready(function() {
     var customer, last_name, first_name;
     var login, pass, login2, pass2, login3, pass3;
+    var loginOk;
+    var passOk;
     var born, ville, mail, phone, url, hobbies, color;
-    var homme, femme;
+    var homme, femme, sexe;
 
     // contrôle password
     $('#pass, #passOk').on('keyup', function(e) {
@@ -58,7 +60,6 @@ $(document).ready(function() {
         }
     });
 
-
     // contrôle url
     $('#url').focusout(function() {
         var urlRegex = new RegExp(/^(HTTP|HTTP|http(s)?:\/\/|(www\.))?[A-Za-z0-9]+([\-\.]{1}[A-Za-z0-9]+)*\.[A-Za-z]{2,40}(:[0-9]{1,40})?(\/.*)?$/);
@@ -106,28 +107,33 @@ $(document).ready(function() {
         login2 = $('#login2').val();
         login3 = localStorage.getItem("login", login);
         if (login2 == login3) {
-            console.log("login ok");
+            $('#logOk').html('Votre login est reconnu!');
         } else {
-            console.log("login erroné");
+            $('#logOk').html('Votre login est faux!');
         }
     });
     $("#pass2").focusout(function() {
         pass2 = $('#pass2').val();
         pass3 = localStorage.getItem("pass", pass);
         if (pass2 == pass3) {
-            console.log("pass ok");
+            $('#passOk').html('Votre mot de passe est accepté!');
         } else {
-            console.log("pass erroné");
+            $('#passOk').html('Vous êtes reconnu comme un hacker!');
         }
     });
 
     // formulaire inscription
     $('#inscrip').click(function() {
-        // var input = $('input').val();
-        // var textarea = $('textarea').val();
-        // if (input == "" || textarea == "") {
-        //     alert("Veuillez renseigner tous les champs");
-        // };
+        var input = $('input').val();
+        var textarea = $('textarea').val();
+        if (input == "" || textarea == "") {
+            alert("Veuillez renseigner tous les champs");
+        };
+        if ($("#femme").is(':checked')) {
+            sexe = "femme";
+        } else if ($("#homme").is(':checked')) {
+            sexe = "homme";
+        }
         customer = {
             last_name: $('#last_name').val(),
             first_name: $('#first_name').val(),
@@ -139,30 +145,26 @@ $(document).ready(function() {
             phone: $('#phone').val(),
             url: $('#url').val(),
             hobbies: $('#hobbies').val(),
-            color: $('#color').val()
+            color: $('#color').val(),
+            sexe: sexe
         };
-        if ($("#femme").is(':checked')) {
-            console.log("femme")
-        } else if ($("#homme").is(':checked')) {
-            console.log("homme")
-        }
-        console.log(customer);
-        return false;
+        localStorage.setItem("customer", JSON.stringify(customer));
     });
 
     $('#connex').click(function() {
         var login2 = $('#login2').val();
         var pass2 = $('#pass2').val();
-        if (login2 == "" || pass2 == "") {
+        var client = JSON.parse(localStorage.getItem("customer"));
+        loginOk = client.login;
+        passOk = client.pass;
+        if (login2 == loginOk && pass2 == passOk) {
+            alert("Bienvenue " + client.first_name);
+        } else if (login2 == "" || pass2 == "") {
             alert("Veuillez renseigner tous les champs");
         } else {
-            alert("Bienvenue");
+            alert("Ce système est sécurisé!! lol");
         }
     });
-
-
-
-
 
 
 });
